@@ -23,7 +23,11 @@ public class GameScreen implements Screen {
     OrthographicCamera camera;
     Array<Block> blocks;
     long lastBlockDrop;
-
+    int score = 0;
+    double velocity = 300;
+    int threshold = 10;
+    int position;
+    int preCase;
 
     public GameScreen(final BlockTap game) {
         this.game = game;
@@ -34,7 +38,8 @@ public class GameScreen implements Screen {
         yellowBlock = new Texture(Gdx.files.internal("yellowBlock.png"));
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1080, 1920);
+        camera.setToOrtho(false, 480, 800);
+
 
         blocks = new Array<Block>();
         spawnBlock();
@@ -42,13 +47,52 @@ public class GameScreen implements Screen {
 
     private void spawnBlock() {
         Block block = new Block();
-        block.x = MathUtils.random(0, 1080 - 256);
-        block.y = 1920;
-        block.width = 256;
-        block.height = 256;
+        //block.x = MathUtils.random(0, );
+        position = MathUtils.random(0, 2);
+        block.x = xPosition();
+        block.y = 800;
+        block.width = 128;
+        block.height = 128;
         block.setTexture(randomTexture());
         blocks.add(block);
         lastBlockDrop = TimeUtils.nanoTime();
+    }
+
+    private int xPosition() {
+        int pavly;
+        switch (position){
+            case 0:
+                if (position != preCase ) {
+                    preCase = 0;
+                    pavly =  10;
+                }
+                else {
+                    pavly = 342;
+                }
+                break;
+            case 1:
+                if (position != preCase ) {
+                    preCase = 1;
+                    pavly = 166;
+                }
+                else {
+                    pavly = 10;
+                }
+                break;
+            case 2:
+                if (position != preCase ) {
+                    preCase = 2;
+                    pavly = 342;
+                }
+                else{
+                    pavly = 166;
+                }
+                break;
+            default:
+                pavly = 10;
+
+        }
+        return pavly;
     }
 
     private Texture randomTexture() {
@@ -83,6 +127,7 @@ public class GameScreen implements Screen {
         // begin new batch
         game.batch.begin();
         // TODO: Add the display for score
+        game.font.draw(game.batch, ""+ score, 240 , 780);
         for (Block block : blocks) {
             game.batch.draw(block.getTexture(), block.x, block.y);
         }
@@ -100,17 +145,25 @@ public class GameScreen implements Screen {
             }
         }
 
-        if (TimeUtils.nanoTime() - lastBlockDrop > 1000000000 *1.5) // if one second* has passed
+        if (TimeUtils.nanoTime() - lastBlockDrop > 1000000000*0.5) // if one second* has passed
             spawnBlock();
+        if(score > threshold) {
+            threshold = threshold*3;
+            velocity = velocity * 1.28;
+        }
 
         Iterator<Block> iter = blocks.iterator();
         while(iter.hasNext()){
             Block block = iter.next();
-            block.y -= 400 * Gdx.graphics.getDeltaTime();
-            if (block.isTouched())
+            block.y -= velocity * Gdx.graphics.getDeltaTime();
+            if (block.isTouched()) {
+                score++;
                 iter.remove();
-            if (block.areaY() < 0)
+            }
+            if (block.areaY() < 0) {
                 iter.remove();
+                game.setScreen(new GameOver(game));
+            }
         }
     }
 
