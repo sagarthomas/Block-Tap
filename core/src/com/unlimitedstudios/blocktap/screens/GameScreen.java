@@ -164,7 +164,7 @@ public class GameScreen implements Screen {
             }
             if (block.areaY() < 0) {
                 iter.remove();
-                game.setScreen(new GameOver(game, score));
+               // game.setScreen(new GameOver(game, score)); Add after Game over Screen is done
             }
         }
     }

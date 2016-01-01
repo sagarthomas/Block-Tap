@@ -41,7 +41,7 @@ public class GameOver implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.setScreen(new GameScreen(game));
-        /*
+        /* Uncomment after Game over is complete
         game.batch.begin();
         //game.font.draw(game.batch, "Game Over", 240, 780);
         game.batch.draw(gameOver, 10, 240);
