@@ -43,6 +43,8 @@ public class GameScreen implements Screen {
 
         blocks = new Array<Block>();
         spawnBlock();
+
+        game.font.getData().setScale(3,3);
     }
 
     private void spawnBlock() {
@@ -145,7 +147,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        if (TimeUtils.nanoTime() - lastBlockDrop > 1000000000*0.5) // if one second* has passed
+        if (TimeUtils.nanoTime() - lastBlockDrop > 1000000000*0.4455687968) // if one second* has passed
             spawnBlock();
         if(score > threshold) {
             threshold = threshold*3;
@@ -162,7 +164,7 @@ public class GameScreen implements Screen {
             }
             if (block.areaY() < 0) {
                 iter.remove();
-                game.setScreen(new GameOver(game));
+                game.setScreen(new GameOver(game, score));
             }
         }
     }
