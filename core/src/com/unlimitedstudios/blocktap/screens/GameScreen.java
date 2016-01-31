@@ -44,7 +44,7 @@ public class GameScreen implements Screen {
         blocks = new Array<Block>();
         spawnBlock();
 
-        game.font.getData().setScale(3,3);
+        game.font.getData().setScale(3, 3);
     }
 
     private void spawnBlock() {
@@ -164,7 +164,7 @@ public class GameScreen implements Screen {
             }
             if (block.areaY() < 0) {
                 iter.remove();
-               // game.setScreen(new GameOver(game, score)); Add after Game over Screen is done
+               game.setScreen(new GameOver(game, score));
             }
         }
     }
